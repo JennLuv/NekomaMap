@@ -48,6 +48,10 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
     var weaponSlot: Weapon?
     var weaponSlotButton: WeaponSlotButton!
     
+    var rooms: [Room]?
+    
+    var enemyIsHitOnce: Bool = false
+    
     
     override func didMove(to view: SKView) {
         
@@ -56,8 +60,8 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
         
         setupCamera()
         
-        let rooms = generateLevel(roomCount: 9)
-        drawDungeon(rooms: rooms)
+        rooms = generateLevel(roomCount: 9)
+        drawDungeon(rooms: rooms!)
         scene?.anchorPoint = .zero
         
         player = createPlayer(at: CGPoint(x: 0, y: 0))
@@ -83,7 +87,7 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
     }
     
     // MARK: createPlayer
-        
+    
     func createPlayer(at position: CGPoint) -> Player2 {
         let player = Player2(hp: 20, imageName: "player", maxHP: 20, name: "Player1")
         player.position = position
@@ -110,9 +114,20 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
             if enemyCandidate1?.name == nil {
                 enemyCandidate2?.takeDamage(1)
                 contact.bodyA.node?.removeFromParent()
+                
+                if !enemyIsHitOnce {
+                    drawWalls(rooms: rooms!)
+                    enemyIsHitOnce = true
+                }
+                
             } else if enemyCandidate2?.name == nil {
                 enemyCandidate1?.takeDamage(1)
                 contact.bodyB.node?.removeFromParent()
+                
+                if !enemyIsHitOnce {
+                    drawWalls(rooms: rooms!)
+                    enemyIsHitOnce = true
+                }
             }
             
         } else if contact.bodyA.categoryBitMask == PhysicsCategory.enemy && contact.bodyB.categoryBitMask == PhysicsCategory.projectile {
@@ -123,18 +138,49 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
             if enemyCandidate1?.name == nil {
                 enemyCandidate2?.takeDamage(1)
                 contact.bodyA.node?.removeFromParent()
+                
+                if !enemyIsHitOnce {
+                    drawWalls(rooms: rooms!)
+                    enemyIsHitOnce = true
+                }
+                
             } else if enemyCandidate2?.name == nil {
                 enemyCandidate1?.takeDamage(1)
                 contact.bodyB.node?.removeFromParent()
+                
+                if !enemyIsHitOnce {
+                    drawWalls(rooms: rooms!)
+                    enemyIsHitOnce = true
+                }
             }
             
         } else if contact.bodyA.categoryBitMask == PhysicsCategory.projectile && contact.bodyB.categoryBitMask == PhysicsCategory.target {
             contact.bodyA.node?.removeFromParent()
+            removeNodesWithJail()
+            enemyIsHitOnce = false
         } else if contact.bodyB.categoryBitMask == PhysicsCategory.projectile && contact.bodyA.categoryBitMask == PhysicsCategory.target {
             contact.bodyB.node?.removeFromParent()
-        } 
+            removeNodesWithJail()
+            enemyIsHitOnce = false
+        } else if contact.bodyB.categoryBitMask == PhysicsCategory.projectile && contact.bodyA.categoryBitMask == PhysicsCategory.wall {
+            contact.bodyB.node?.removeFromParent()
+            removeNodesWithJail()
+            enemyIsHitOnce = false
+        } else if contact.bodyB.categoryBitMask == PhysicsCategory.projectile && contact.bodyA.categoryBitMask == PhysicsCategory.wall {
+            contact.bodyB.node?.removeFromParent()
+            removeNodesWithJail()
+            enemyIsHitOnce = false
+        }
     }
-
+    
+    func removeNodesWithJail() {
+        let jailNodes = children.filter { node in
+            return node.physicsBody?.categoryBitMask == PhysicsCategory.wall
+        }
+        jailNodes.forEach { $0.removeFromParent() }
+    }
+    
+    
     
     // MARK: Update
     
@@ -233,8 +279,8 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
             }
             return nil
         }
-
-
+        
+        
         
         func isPlayerCloseToEnemy() -> Bool {
             let weaponRange: CGFloat = 50.0 // Adjust the range as necessary
@@ -247,9 +293,9 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
             return false
         }
         
-//        if let buttonB = virtualController?.controller?.extendedGamepad?.buttonB, buttonB.isPressed {
-//            meleeAttack()
-//        }
+        //        if let buttonB = virtualController?.controller?.extendedGamepad?.buttonB, buttonB.isPressed {
+        //            meleeAttack()
+        //        }
         
     }
     
@@ -406,6 +452,39 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
             addChild(enemy3)
             addChild(weaponSpawn)
             addChild(weaponSpawn2)
+        }
+    }
+    
+    func drawWalls(rooms: [Room]) {
+        
+        
+        for room in rooms {
+            let jailNode = SKSpriteNode(imageNamed: room.getRoomImage().jailName)
+            jailNode.position = room.position
+            
+            let jailExtraNode = SKSpriteNode(imageNamed: room.getRoomImage().jailExtraName)
+            jailExtraNode.position = room.position
+            
+            
+            // Set up the physics body based on the room image
+            jailNode.physicsBody = SKPhysicsBody(texture: jailNode.texture!, size: jailNode.size)
+            jailNode.physicsBody?.isDynamic = false
+            jailNode.physicsBody?.usesPreciseCollisionDetection = true
+            jailNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+            jailNode.physicsBody?.collisionBitMask = PhysicsCategory.wall
+            jailNode.physicsBody?.contactTestBitMask = PhysicsCategory.projectile
+            
+            //for extra image
+            // Set up the physics body based on the room image
+            jailExtraNode.physicsBody = SKPhysicsBody(texture: jailExtraNode.texture!, size: jailExtraNode.size)
+            jailExtraNode.physicsBody?.isDynamic = false
+            jailExtraNode.physicsBody?.usesPreciseCollisionDetection = true
+            jailExtraNode.physicsBody?.categoryBitMask = PhysicsCategory.wall
+            jailExtraNode.physicsBody?.collisionBitMask = PhysicsCategory.wall
+            jailExtraNode.physicsBody?.contactTestBitMask = PhysicsCategory.projectile
+            
+            addChild(jailExtraNode)
+            addChild(jailNode)
         }
     }
     
