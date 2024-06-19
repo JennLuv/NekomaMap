@@ -7,7 +7,7 @@
 
 import SpriteKit
 
-let defaultWeapon = Weapon(imageName: "laserPointer", weaponName: "laserPointer")
+let defaultWeapon = Weapon(imageName: "laserPointer", weaponName: "laserPointer", rarity: .common)
 
 class Player2: SKSpriteNode {
     var hp: Int {

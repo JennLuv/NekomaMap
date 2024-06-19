@@ -20,6 +20,8 @@
 		3578305A2C1AE549007043F2 /* StartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 357830592C1AE549007043F2 /* StartViewModel.swift */; };
 		35AC17EF2C212FAA00601232 /* Weapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AC17EE2C212FAA00601232 /* Weapon.swift */; };
 		35AC17F12C2132D100601232 /* WeaponSlotButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AC17F02C2132D100601232 /* WeaponSlotButton.swift */; };
+		EC54CD9B2C224AC00017D74D /* Chest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC54CD9A2C224AC00017D74D /* Chest.swift */; };
+		EC54CD9D2C224B900017D74D /* Fish.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC54CD9C2C224B8F0017D74D /* Fish.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,8 @@
 		357830592C1AE549007043F2 /* StartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewModel.swift; sourceTree = "<group>"; };
 		35AC17EE2C212FAA00601232 /* Weapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weapon.swift; sourceTree = "<group>"; };
 		35AC17F02C2132D100601232 /* WeaponSlotButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeaponSlotButton.swift; sourceTree = "<group>"; };
+		EC54CD9A2C224AC00017D74D /* Chest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chest.swift; sourceTree = "<group>"; };
+		EC54CD9C2C224B8F0017D74D /* Fish.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fish.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 				352FA0082C202B0E00D8A849 /* Player2.swift */,
 				35584CBA2C1CB0E0003020DE /* Enemy2.swift */,
 				354F482D2C15D8DE00290A4B /* DungeonRoomModel.swift */,
+				EC54CD9A2C224AC00017D74D /* Chest.swift */,
+				EC54CD9C2C224B8F0017D74D /* Fish.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -191,12 +197,14 @@
 				352FA0092C202B0E00D8A849 /* Player2.swift in Sources */,
 				3578305A2C1AE549007043F2 /* StartViewModel.swift in Sources */,
 				354F48202C15CEF800290A4B /* ContentView.swift in Sources */,
+				EC54CD9D2C224B900017D74D /* Fish.swift in Sources */,
 				35584CB92C1CB0CA003020DE /* DungeonScene2.swift in Sources */,
 				357830562C1AD224007043F2 /* StartView.swift in Sources */,
 				35AC17EF2C212FAA00601232 /* Weapon.swift in Sources */,
 				35AC17F12C2132D100601232 /* WeaponSlotButton.swift in Sources */,
 				354F481E2C15CEF800290A4B /* NekomaMap2App.swift in Sources */,
 				354F482E2C15D8DE00290A4B /* DungeonRoomModel.swift in Sources */,
+				EC54CD9B2C224AC00017D74D /* Chest.swift in Sources */,
 				35584CBB2C1CB0E0003020DE /* Enemy2.swift in Sources */,
 				357830582C1AD900007043F2 /* LoadingView.swift in Sources */,
 			);
