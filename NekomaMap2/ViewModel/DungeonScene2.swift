@@ -39,6 +39,7 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
     var playerIsAttacking = false
     
     // Array
+    var enemies: [Enemy] = []
     var enemyManager = [String: Enemy2]()
     
     var weaponSlot: Weapon?
@@ -112,8 +113,8 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
         
         if contact.bodyA.categoryBitMask == PhysicsCategory.projectile && contact.bodyB.categoryBitMask == PhysicsCategory.enemy {
             
-            let enemyCandidate1 = contact.bodyA.node as? Enemy2
-            let enemyCandidate2 = contact.bodyB.node as? Enemy2
+            let enemyCandidate1 = contact.bodyA.node as? Enemy
+            let enemyCandidate2 = contact.bodyB.node as? Enemy
             
             if enemyCandidate1?.name == nil {
                 enemyCandidate2?.takeDamage(1)
@@ -412,6 +413,15 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
 //        if let buttonB = virtualController?.controller?.extendedGamepad?.buttonB, buttonB.isPressed {
 //            meleeAttack()
 //        }
+        for enemy in enemies {
+            let distance = hypotf(Float(enemy.position.x - player.position.x), Float(enemy.position.y - player.position.y))
+            if distance < 150 {
+                enemy.chasePlayer(player: player)
+                if let rangedEnemy = enemy as? RangedEnemy {
+                    rangedEnemy.shootBullet(player: player, scene: self)
+                }
+            }
+        }
         
     }
     
@@ -491,6 +501,18 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func randomPosition(in room: Room) -> CGPoint {
+        let minX = room.position.x - (360 / 2)
+        let maxX = room.position.x + (360 / 2)
+        let minY = room.position.y - (360 / 2)
+        let maxY = room.position.y + (360 / 2)
+        
+        let randomX = CGFloat.random(in: minX..<maxX)
+        let randomY = CGFloat.random(in: minY..<maxY)
+        
+        return CGPoint(x: randomX, y: randomY)
+    }
+    
     // MARK: connectVirtualController
     
     func connectVirtualController() {
@@ -549,9 +571,22 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
             addChild(roomNode)
             addChild(roomExtraNode)
             
-            let enemy1 = createEnemy(at: CGPoint(x: room.position.x + 100, y: room.position.y))
-            let enemy2 = createEnemy(at: CGPoint(x: room.position.x - 100, y: room.position.y))
-            let enemy3 = createEnemy(at: CGPoint(x: room.position.x, y: room.position.y + 100))
+            for _ in 0..<Int.random(in: 3...4) {
+                let meleeEnemy = MeleeEnemy()
+                meleeEnemy.position = randomPosition(in: room)
+                addChild(meleeEnemy)
+                enemies.append(meleeEnemy)
+            }
+            for _ in 0..<Int.random(in: 0...2) {
+                let rangedEnemy = RangedEnemy()
+                rangedEnemy.position = randomPosition(in: room)
+                addChild(rangedEnemy)
+                enemies.append(rangedEnemy)
+            }
+            
+//            let enemy1 = createEnemy(at: CGPoint(x: room.position.x + 100, y: room.position.y))
+//            let enemy2 = createEnemy(at: CGPoint(x: room.position.x - 100, y: room.position.y))
+//            let enemy3 = createEnemy(at: CGPoint(x: room.position.x, y: room.position.y + 100))
             
             let weaponSpawn = Weapon(imageName: "cherryBomb", weaponName: "cherryBomb")
             weaponSpawn.position = CGPoint(x: room.position.x, y: room.position.y - 100)
@@ -563,9 +598,9 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
             let originalSize2 = weaponSpawn2.size
             weaponSpawn2.size = CGSize(width: originalSize2.width / 2, height: originalSize2.height / 2)
             
-            addChild(enemy1)
-            addChild(enemy2)
-            addChild(enemy3)
+//            addChild(enemy1)
+//            addChild(enemy2)
+//            addChild(enemy3)
             addChild(weaponSpawn)
             addChild(weaponSpawn2)
         }

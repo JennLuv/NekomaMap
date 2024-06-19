@@ -20,6 +20,7 @@
 		3578305A2C1AE549007043F2 /* StartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 357830592C1AE549007043F2 /* StartViewModel.swift */; };
 		35AC17EF2C212FAA00601232 /* Weapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AC17EE2C212FAA00601232 /* Weapon.swift */; };
 		35AC17F12C2132D100601232 /* WeaponSlotButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AC17F02C2132D100601232 /* WeaponSlotButton.swift */; };
+		E03239852C22C27900A6D58B /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03239842C22C27900A6D58B /* Enemy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		357830592C1AE549007043F2 /* StartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewModel.swift; sourceTree = "<group>"; };
 		35AC17EE2C212FAA00601232 /* Weapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weapon.swift; sourceTree = "<group>"; };
 		35AC17F02C2132D100601232 /* WeaponSlotButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeaponSlotButton.swift; sourceTree = "<group>"; };
+		E03239842C22C27900A6D58B /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				352FA0082C202B0E00D8A849 /* Player2.swift */,
 				35584CBA2C1CB0E0003020DE /* Enemy2.swift */,
 				354F482D2C15D8DE00290A4B /* DungeonRoomModel.swift */,
+				E03239842C22C27900A6D58B /* Enemy.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 				35AC17EF2C212FAA00601232 /* Weapon.swift in Sources */,
 				35AC17F12C2132D100601232 /* WeaponSlotButton.swift in Sources */,
 				354F481E2C15CEF800290A4B /* NekomaMap2App.swift in Sources */,
+				E03239852C22C27900A6D58B /* Enemy.swift in Sources */,
 				354F482E2C15D8DE00290A4B /* DungeonRoomModel.swift in Sources */,
 				35584CBB2C1CB0E0003020DE /* Enemy2.swift in Sources */,
 				357830582C1AD900007043F2 /* LoadingView.swift in Sources */,
@@ -332,7 +336,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NekomaMap2/Preview Content\"";
-				DEVELOPMENT_TEAM = UC3J8RRB7A;
+				DEVELOPMENT_TEAM = 8FPJ93WVDR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -340,6 +344,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -361,7 +366,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"NekomaMap2/Preview Content\"";
-				DEVELOPMENT_TEAM = UC3J8RRB7A;
+				DEVELOPMENT_TEAM = 8FPJ93WVDR;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -369,6 +374,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
