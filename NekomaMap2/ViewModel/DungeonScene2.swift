@@ -240,12 +240,8 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
                 shootImage()
             }
             
-            for child in self.children{
-                print(child)
-            }
+            checkPlayerDistanceToChests()
         }
-        
-        checkPlayerDistanceToChests()
         
         func checkPlayerDistanceToChests() {
             let range: CGFloat = 100.0

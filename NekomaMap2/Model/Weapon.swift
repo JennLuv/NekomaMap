@@ -24,4 +24,17 @@ class Weapon: SKSpriteNode {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    static func allWeapons() -> [Weapon] {
+        let weapons: [Weapon] = [
+            Weapon(imageName: "cherryBomb", weaponName: "cherryBomb", rarity: .common),
+            Weapon(imageName: "fishboneSword", weaponName: "fishboneSword", rarity: .common),
+            Weapon(imageName: "laserPointer", weaponName: "laserPointer", rarity: .common),
+            Weapon(imageName: "rainbowCatnip", weaponName: "rainbowCatnip", rarity: .uncommon),
+            Weapon(imageName: "shuriken", weaponName: "shuriken", rarity: .uncommon),
+            Weapon(imageName: "tigerClaw", weaponName: "tigerClaw", rarity: .rare),
+            Weapon(imageName: "yarnBall", weaponName: "yarnBall", rarity: .rare),
+        ]
+        return weapons
+    }
 }

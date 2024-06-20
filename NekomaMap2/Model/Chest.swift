@@ -37,30 +37,6 @@ class Chest: SKSpriteNode {
         4: (roomsWithChest: 7, filledChests: 3, bossAppear: false),
         5: (roomsWithChest: 7, filledChests: 4, bossAppear: true)
     ]
-
-    let weapons: [Weapon] = [
-        Weapon(imageName: "cherryBomb", weaponName: "cherryBomb", rarity: .common),
-        Weapon(imageName: "fishboneSword", weaponName: "fishboneSword", rarity: .common),
-        Weapon(imageName: "laserPointer", weaponName: "laserPointer", rarity: .common),
-        Weapon(imageName: "rainbowCatnip", weaponName: "rainbowCatnip", rarity: .uncommon),
-        Weapon(imageName: "shuriken", weaponName: "shuriken", rarity: .uncommon),
-        Weapon(imageName: "tigerClaw", weaponName: "tigerClaw", rarity: .rare),
-        Weapon(imageName: "yarnBall", weaponName: "yarnBall", rarity: .rare),
-    ]
-    let fishes: [Fish] = [
-        Fish(imageName: "yarnBall", fishName: "Salmon", bonusLives: 0, bonusAttack: 0.1, bonusSpeed: 0, specialPower: SpecialPower(name: "Salmon Leap", cooldown: 100), rarity: .common),
-        Fish(imageName: "yarnBall", fishName: "Salmon", bonusLives: 0, bonusAttack: 0.2, bonusSpeed: -2, specialPower: SpecialPower(name: "Salmon Leap", cooldown: 120), rarity: .uncommon),
-        Fish(imageName: "yarnBall", fishName: "Salmon", bonusLives: 0, bonusAttack: 0.3, bonusSpeed: 0, specialPower: SpecialPower(name: "Salmon Leap", cooldown: 150), rarity: .rare),
-        Fish(imageName: "yarnBall", fishName: "Sashimi", bonusLives: 1, bonusAttack: 0, bonusSpeed: 0, specialPower: SpecialPower(name: "Fresh Sashimi", cooldown: 100), rarity: .common),
-        Fish(imageName: "yarnBall", fishName: "Sashimi", bonusLives: 2, bonusAttack: -0.1, bonusSpeed: -1, specialPower: SpecialPower(name: "Fresh Sashimi", cooldown: 120), rarity: .uncommon),
-        Fish(imageName: "yarnBall", fishName: "Sashimi", bonusLives: 2, bonusAttack: 0, bonusSpeed: 0, specialPower: SpecialPower(name: "Fresh Sashimi", cooldown: 150), rarity: .rare),
-        Fish(imageName: "yarnBall", fishName: "Tuna", bonusLives: 0, bonusAttack: 0, bonusSpeed: 2, specialPower: SpecialPower(name: "Tuna Terror", cooldown: 100), rarity: .common),
-        Fish(imageName: "yarnBall", fishName: "Tuna", bonusLives: 0, bonusAttack: -0.2, bonusSpeed: 4, specialPower: SpecialPower(name: "Tuna Terror", cooldown: 120), rarity: .uncommon),
-        Fish(imageName: "yarnBall", fishName: "Tuna", bonusLives: 0, bonusAttack: 0, bonusSpeed: 4, specialPower: SpecialPower(name: "Tuna Terror", cooldown: 150), rarity: .rare),
-        Fish(imageName: "yarnBall", fishName: "Puffer Fish", bonusLives: 0, bonusAttack: 0.05, bonusSpeed: 1, specialPower: SpecialPower(name: "Invincibility", cooldown: 100), rarity: .common),
-        Fish(imageName: "yarnBall", fishName: "Puffer Fish", bonusLives: 1, bonusAttack: 0.1, bonusSpeed: 2, specialPower: SpecialPower(name: "Invincibility", cooldown: 5), rarity: .uncommon),
-        Fish(imageName: "yarnBall", fishName: "Puffer Fish", bonusLives: 2, bonusAttack: 0.2, bonusSpeed: 2, specialPower: SpecialPower(name: "Invincibility", cooldown: 150), rarity: .rare)
-    ]
     
     // MARK: Initialization
     init(id: Int, content: ChestContent?) {
@@ -79,7 +55,7 @@ class Chest: SKSpriteNode {
         let chest = Chest(id: room, content: content)
         chest.position = position
         chest.size = CGSize(width: 40, height: 40)
-        chest.physicsBody = SKPhysicsBody(rectangleOf: chest.size)
+        chest.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 20, height: 10))
         chest.physicsBody?.isDynamic = false
         chest.physicsBody?.usesPreciseCollisionDetection = true
         chest.physicsBody?.categoryBitMask = PhysicsCategory.target
@@ -199,7 +175,7 @@ class Chest: SKSpriteNode {
     }
     
     func getWeapon(rarityValue: RarityLevel?) -> ChestContentType? {
-        let filteredWeapons = weapons.filter { $0.rarity == rarityValue }
+        let filteredWeapons = Weapon.allWeapons().filter { $0.rarity == rarityValue }
         if let randomWeapon = filteredWeapons.randomElement() {
             return .weapon(randomWeapon)
         }
@@ -207,7 +183,7 @@ class Chest: SKSpriteNode {
     }
     
     func getFish(rarityValue: RarityLevel?) -> ChestContentType? {
-        let filteredFish = fishes.filter { $0.rarity == rarityValue }
+        let filteredFish = Fish.allFishes().filter { $0.rarity == rarityValue }
         if let randomFish = filteredFish.randomElement() {
             return .fish(randomFish)
         }

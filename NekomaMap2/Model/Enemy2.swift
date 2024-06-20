@@ -19,7 +19,7 @@ class Enemy2: SKSpriteNode {
         self.hpBarForeground = SKSpriteNode(color: .red, size: CGSize(width: 50, height: 5))
         
         super.init(texture: texture, color: .clear, size: texture.size())
-        
+
         self.name = name
         self.physicsBody = SKPhysicsBody(texture: texture, size: self.size)
         self.physicsBody?.isDynamic = true
@@ -54,6 +54,7 @@ class Enemy2: SKSpriteNode {
             self.removeFromParent()
         }
     }
+
     private func updateHPBar() {
         let hpRatio = CGFloat(hp) / CGFloat(maxHP)
         hpBarForeground.size.width = hpBarBackground.size.width * hpRatio
