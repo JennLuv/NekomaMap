@@ -14,8 +14,11 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
     var idCounter = 1
     var cameraNode: SKCameraNode!
     
-    //Game Over
+    //Game State
     @Binding var isGameOver: Bool
+    var isTransitioning = false
+    var didMoveCompleted = false
+    var savedState: [String: Any] = [:]
     
     //Joystick
     var player: Player2!
@@ -174,6 +177,7 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
     init(isGameOver: Binding<Bool>) {
         self._isGameOver = isGameOver
         super.init(size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+        print("DUNGEON SCENE")
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -186,6 +190,7 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
     var isBossChestSpawned = false
     
     override func didMove(to view: SKView) {
+        print("================NEW SCENE===================")
         
         enemyCount = countEnemies()
         let customButton = updateButtonImage()
@@ -194,6 +199,10 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         
         setupCamera()
+        
+        if lightNode.parent != nil {
+            lightNode.removeFromParent()
+        }
         
         lightNode.position = CGPoint(x: 0.0, y: 0.0)
         lightNode.zPosition = CGFloat(lightNodeZPos)
@@ -281,6 +290,9 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
         cameraNode.addChild(customButton)
         
         soundManager.playSound(fileName: BGM.gameplay, loop: true)
+        
+        guard !didMoveCompleted else { return }  // Prevent multiple calls
+        didMoveCompleted = true
     }
     
     func setupFishSlotButton() {
@@ -576,6 +588,7 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
                 
                 if !enemyIsAttacked {
                     handleEnemyComparison(enemyName: enemyName!)
+                    handleEnemyComparison(enemyName: enemyName!)
                 }
                 
             }
@@ -601,6 +614,19 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
         } else if contact.bodyB.categoryBitMask == PhysicsCategory.wall && contact.bodyA.categoryBitMask == PhysicsCategory.projectile {
             contact.bodyA.node?.removeFromParent()
             
+        } else if contact.bodyA.categoryBitMask == PhysicsCategory.player && contact.bodyB.categoryBitMask == PhysicsCategory.stair {
+            if !isTransitioning {
+                isTransitioning = true
+                DungeonStateManager.shared.saveState(from: self)
+                DungeonStateManager.shared.transitionToSpecialRoom(from: self)
+            }
+            
+        } else if contact.bodyB.categoryBitMask == PhysicsCategory.player && contact.bodyA.categoryBitMask == PhysicsCategory.stair {
+            if !isTransitioning {
+                isTransitioning = true
+                DungeonStateManager.shared.saveState(from: self)
+                DungeonStateManager.shared.transitionToSpecialRoom(from: self)
+            }
         }
     }
     
@@ -668,12 +694,28 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
             } else {
                 if let chest = chests.first(where: { $0.id == roomID }) {
                     let chestNode = Chest.createChestNode(at: room.position, room: room.id, content: chest.content)
+                    let stairNode = spawnStair(at: room.position)
                     currentChestIndicator = Chest.createChestIndicator(at: chest)
                     addChild(chestNode)
+                    addChild(stairNode)
                     addChild(currentChestIndicator!)
                 }
             }
         }
+    }
+    
+    func spawnStair(at position: CGPoint) -> SKSpriteNode {
+        let stair = SKSpriteNode(imageNamed: "stair")
+        stair.name = "stair"
+        stair.position = CGPoint(x: position.x, y: position.y + 100)
+        stair.size = CGSize(width: 50, height: 50)
+        stair.physicsBody = SKPhysicsBody(rectangleOf: stair.size)
+        stair.physicsBody?.isDynamic = false
+        stair.physicsBody?.usesPreciseCollisionDetection = true
+        stair.physicsBody?.categoryBitMask = PhysicsCategory.stair
+        stair.physicsBody?.collisionBitMask = PhysicsCategory.none
+        stair.physicsBody?.contactTestBitMask = PhysicsCategory.player
+        return stair
     }
     
     func handleJailRemoval(enemyName: String) {
@@ -964,6 +1006,7 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
     
     // MARK: Update
     func changeAndPlayWeaponNowAnimation() {
+        weaponNow.removeFromParent()
         weaponNow = player.equippedWeapon
         weaponNow.size = CGSize(width: 60, height: 60)
         weaponNow.position = CGPoint(x: -10, y: 30)
@@ -1080,6 +1123,7 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
             
             cameraNode.position = player.position
             updateChestIndicator()
+            
         }
         
         if buttonAIsPressed {
@@ -1161,7 +1205,7 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
             } else {
                 shootImage()
             }
-            checkPlayerDistanceToChests()
+            isPlayerCloseToChest()
         }
         checkBossDefeated()
         
@@ -1180,8 +1224,8 @@ class DungeonScene2: SKScene, SKPhysicsContactDelegate {
         }
         
     }
-    
-    func checkPlayerDistanceToChests() {
+
+    func isPlayerCloseToChest() {
         let range: CGFloat = 40.0
         let targetNodes = children.filter { node in
             return node is Chest

@@ -17,6 +17,7 @@ struct PhysicsCategory {
     static let enemy: UInt32 = 32               // 100000
     static let wall: UInt32 = 11                // 001011
     static let enemyProjectile: UInt32 = 24     // 011000
+    static let stair: UInt32 = 1
 }
 
 enum Direction: String {
